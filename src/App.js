@@ -3,10 +3,23 @@ import "./App.css";
 import { Base64 } from "js-base64";
 import * as React from "react";
 import { Container, Box, TextField, Typography } from "@mui/material";
+import { PropTypes } from "prop-types";
 
-function App() {
-  const encodeRef = React.useRef();
-  const decodeRef = React.useRef();
+
+function App(props) {
+  const encodedRef = React.useRef();
+  const decodedRef = React.useRef();
+  
+  React.useEffect(() => {
+    console.log("props:"+props.encode+props.decode);
+    if (props.encoded) {
+      encodedRef.current.value = props.encoded;
+      handleDecode();
+    } else if (props.decoded) {
+      decodedRef.current.value = props.decoded;
+      handleEncode();
+    }
+  });
 
   const decode = (str) => {
     return Base64.decode(str);
@@ -16,16 +29,16 @@ function App() {
     return Base64.encode(str);
   };
 
-  const handleEncode = (event) => {
-    let encodeStr = encode(decodeRef.current.value);
+  const handleEncode = () => {
+    let encodeStr = encode(decodedRef.current.value);
     console.log("encode:" + encodeStr);
-    encodeRef.current.value = encodeStr;
+    encodedRef.current.value = encodeStr;
   };
 
-  const handleDecode = (event) => {
-    let decodeStr = decode(encodeRef.current.value);
+  const handleDecode = () => {
+    let decodeStr = decode(encodedRef.current.value);
     console.log("decode:" + decodeStr);
-    decodeRef.current.value = decodeStr;
+    decodedRef.current.value = decodeStr;
   };
 
   return (
@@ -40,11 +53,11 @@ function App() {
         autoComplete="off"
         center
       >
-        <Typography variant="h2">Simple Base64 converter</Typography>
+        <Typography variant="h2">Comical Base64 converter</Typography>
 
           <TextField
             id="decoded"
-            inputRef={decodeRef}
+            inputRef={decodedRef}
             label="Decoded"
             variant="outlined"
             InputLabelProps={{
@@ -57,7 +70,7 @@ function App() {
         <TextField
           id="encoded"
           //value={decodeVal}
-          inputRef={encodeRef}
+          inputRef={encodedRef}
           label="Encoded"
           variant="outlined"
           InputLabelProps={{
@@ -69,6 +82,11 @@ function App() {
       </Box>
     </Container>
   );
+}
+
+App.propTypes = {
+  encoded: PropTypes.string,
+  decoded: PropTypes.string,
 }
 
 export default App;
