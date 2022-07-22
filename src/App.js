@@ -53,7 +53,7 @@ function App(props) {
         autoComplete="off"
         center
       >
-        <Typography variant="h2">Comical Base64 converter</Typography>
+        <Typography variant="h2">Comical Base64 Converter</Typography>
 
           <TextField
             id="decoded"
